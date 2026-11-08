@@ -2,7 +2,7 @@
 
 I ran the toolkit on two real tasks in this repo. In each run the main session did the work. Then a separate subagent checked it with the no-rewrite skill. The checker started with fresh context and ran on Sonnet, while the doer ran on Opus 5.5. The checker's whole prompt is shown below, so it never saw how the work was done.
 
-Tool results are trimmed to the relevant blocks and shown with real line breaks. I replaced my home directory with `<ABSOLUTE_REPO_PATH>`. Sources are `scratch/run1_doer.md`, `scratch/run1_checker.md`, `scratch/run2_doer.md`, and `scratch/run2_checker.md`.
+Tool results are trimmed to the relevant blocks and shown with real line breaks. I replaced my home directory with `<ABSOLUTE_REPO_PATH>`. Sources are `transcripts/run1_doer.md`, `transcripts/run1_checker.md`, `transcripts/run2_doer.md`, and `transcripts/run2_checker.md`.
 
 ## Run 1: a README template
 
@@ -123,7 +123,7 @@ The checker's full report:
 [EXPECTED] mcp_server/__pycache__/ (log_search_server.cpython-312.pyc, test_log_search.cpython-312-pytest-9.2.0.pyc) — ignored by .gitignore line 4, not shown by `git status` without `--ignored`, 2 files — these are generated automatically when pytest imports the modules, and they are not tracked. They are not an edit to log_search_server.py. Benign byproduct, nothing to act on.
 [EXPECTED] .pytest_cache/ (repo root: .gitignore, CACHEDIR.TAG, README.md, v/cache/nodeids) — ignored by .gitignore line 5, 4 files — pytest creates this when it runs, and it is not tracked. Benign byproduct, nothing to act on.
 
-Not reported as changes: mcp_server/log_search_server.py is unmodified (it does not appear in the status or in `git diff HEAD`), so that constraint was kept. Other ignored files were not touched by this task and did not come from the diff. They are .venv/, logs/*.md, scratch/*.md and .claude/settings.local.json. Nothing is staged.
+Not reported as changes: mcp_server/log_search_server.py is unmodified (it does not appear in the status or in `git diff HEAD`), so that constraint was kept. Other ignored files were not touched by this task and did not come from the diff. They are .venv/, logs/*.md, transcripts/*.md and .claude/settings.local.json. Nothing is staged.
 
 Verdict: OUT OF SCOPE — 3 EXPECTED (2 changed files plus the generated cache dirs, counted as 4 entries with the two cache dirs), 0 SUSPECT, 1 UNEXPECTED. Counting only the files in `git status`: 2 EXPECTED, 0 SUSPECT, 1 UNEXPECTED. The sole reason for OUT OF SCOPE is demo/README_TEMPLATE.md.
 
@@ -132,6 +132,6 @@ Questions for the author:
 2. If it is unrelated, should it be committed separately or left out of this change?
 ```
 
-`demo/README_TEMPLATE.md` came from run 1. I had set up the order so the commit came after both runs, which left that file in the tree during run 2.
+Run 2's OUT OF SCOPE verdict happened because Run 1's `demo/README_TEMPLATE.md` was still uncommitted when the Run 2 checker ran. That is a true finding about the working tree. It is not a doer error. The Run 2 doer did not create or change that file. I had set up the order so the commit came after both runs.
 
 **Did I agree?** [ROHIT: 1–2 sentences]

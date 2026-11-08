@@ -6,7 +6,7 @@ Two small tools for working with coding agents. One is a skill that checks wheth
 
 no-rewrite compares the files changed in a git repo against what a task asked for. It sorts every changed file into EXPECTED, SUSPECT, or UNEXPECTED and gives a verdict. It only reports. It never fixes anything.
 
-It triggers after an agent has edited files, before a commit, or when I say "what did you touch". It needs the task description. When I gave it only "check what you touched", it stopped and asked for the task. When I asked "did the last run go okay?", it did not run. Both results are in `scratch/break.md`.
+It triggers after an agent has edited files, before a commit, or when I say "what did you touch". It needs the task description. When I gave it only "check what you touched", it stopped and asked for the task. When I asked "did the last run go okay?", it did not run. Both results are in `transcripts/break.md`.
 
 I wanted this because I keep putting scope limits in my prompts:
 
@@ -22,7 +22,7 @@ Here is the honest caveat. My logs show many "don't do X yet" instructions, but 
 
 search_logs is an MCP tool that searches the `.md` and `.txt` files under `LOGS_DIR`. The match ignores case and treats the query as literal text. It returns up to `max_results` matches, each with the file, the line number, and two lines of context on each side. The first line says how many matches there were in total.
 
-It matches substrings, so "diff" also hits "difficulty". You can see that in `scratch/run2_doer.md`.
+It matches substrings, so "diff" also hits "difficulty". You can see that in `transcripts/run2_doer.md`.
 
 I wanted this because I repeat the same standing instructions in every assignment:
 
@@ -67,7 +67,7 @@ For the server, edit `.mcp.json` in the repo root. Every value in angle brackets
 
 Run the tests with `.venv/bin/python -m pytest`.
 
-Confirmed working in: Claude Code 2.1.319. The tool call and raw result are in `scratch/mcp_registration_test.md`.
+Confirmed working in: Claude Code 2.1.319. The tool call and raw result are in `transcripts/mcp_registration_test.md`.
 
 ## What I borrowed
 
@@ -77,4 +77,4 @@ The structure of the skill is modeled on the course's spec-check example. The se
 
 Claude Code scaffolded the skill, the server, and the config, and drafted these docs from saved transcripts. I directed the design decisions and reviewed everything.
 
-More detail is in `DEMONSTRATION.md` and `ITERATION.md`. The `scratch/` folder is gitignored, so those files exist only on my machine. The two docs carry the parts that matter.
+More detail is in `DEMONSTRATION.md` and `ITERATION.md`. The saved evidence for both is in `transcripts/`.

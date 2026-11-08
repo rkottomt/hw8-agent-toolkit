@@ -1,6 +1,6 @@
 # Iteration
 
-I tried to break the skill and the server. The full record is in `scratch/break.md`. The skill passed two of three cases. With no task it stopped and asked. On an unrelated question it did not trigger. It failed the third case, a clean tree with the task "do nothing". The server handled all six odd inputs without crashing, so I fixed the skill.
+I tried to break the skill and the server. The full record is in `transcripts/break.md`. The skill passed two of three cases. With no task it stopped and asked. On an unrelated question it did not trigger. It failed the third case, a clean tree with the task "do nothing". The server handled all six odd inputs without crashing, so I fixed the skill.
 
 ## Before
 
