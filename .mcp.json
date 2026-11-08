@@ -1,12 +1,12 @@
 {
   "mcpServers": {
     "log-search": {
-      "command": "/Users/rohitkottomtharayil/hw8-agent-toolkit/.venv/bin/python",
+      "command": "<YOUR_PYTHON_PATH>",
       "args": [
-        "/Users/rohitkottomtharayil/hw8-agent-toolkit/mcp_server/log_search_server.py"
+        "<ABSOLUTE_REPO_PATH>/mcp_server/log_search_server.py"
       ],
       "env": {
-        "LOGS_DIR": "/Users/rohitkottomtharayil/hw8-agent-toolkit/logs"
+        "LOGS_DIR": "<ABSOLUTE_REPO_PATH>/logs"
       }
     }
   }
