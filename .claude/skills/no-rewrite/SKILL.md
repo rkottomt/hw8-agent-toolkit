@@ -49,6 +49,8 @@ Then:
 
 Verdict: <IN SCOPE | NEEDS REVIEW | OUT OF SCOPE> — <counts of each bucket>
 
-IN SCOPE means all files are EXPECTED. NEEDS REVIEW means at least one SUSPECT and no UNEXPECTED. OUT OF SCOPE means at least one UNEXPECTED.
+IN SCOPE means at least one file changed and all files are EXPECTED. NEEDS REVIEW means at least one SUSPECT and no UNEXPECTED. OUT OF SCOPE means at least one UNEXPECTED.
+
+If step 3 shows no changed files, none of those verdicts apply. Print exactly this line and nothing else: `Verdict: NO UNCOMMITTED CHANGES — send a commit range to compare`.
 
 Questions for the author: up to 3, only about files marked UNEXPECTED or SUSPECT. Leave this section out if there are none.
