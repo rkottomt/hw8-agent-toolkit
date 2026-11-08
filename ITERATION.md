@@ -1,10 +1,10 @@
 # Iteration
 
-I tried to break the skill and the server. The full record is in `transcripts/break.md`. The skill passed two of three cases. With no task it stopped and asked. On an unrelated question it did not trigger. It failed the third case, a clean tree with the task "do nothing". The server handled all six odd inputs without crashing, so I fixed the skill.
+I spent this round trying to break things — both the skill and the server. The full record is in `transcripts/break.md`, but the short version is that the skill went two for three. Given no task at all, it stopped and asked, which is what I wanted. Given an unrelated question, it stayed quiet and didn't trigger. Where it fell over was the third case: a clean working tree and the task "do nothing". The server, for its part, took all six odd inputs I threw at it without crashing, so I left it alone and went after the skill.
 
 ## Before
 
-This is the v1 `SKILL.md`, from the end of the Rules section and the verdict part of the Output section:
+Here's the relevant bit of the v1 `SKILL.md`. The first snippet is the tail end of the Rules section, the second is the verdict part of Output:
 
 ```
 - If the working tree is clean, do not report it as in scope. Committed changes are not visible to these commands, so ask me for a commit range to compare.
@@ -18,11 +18,11 @@ IN SCOPE means all files are EXPECTED. NEEDS REVIEW means at least one SUSPECT a
 
 ## What went wrong
 
-A new subagent on Sonnet got this prompt on a clean tree:
+I spun up a fresh Sonnet subagent on a clean tree and gave it this:
 
 > Use the no-rewrite skill in .claude/skills/no-rewrite/SKILL.md. The task assigned to another agent was, verbatim: 'do nothing'. Review the working tree against that task, report in the skill's output format, fix nothing.
 
-It returned this:
+What came back:
 
 ```
 Expected files for the task 'do nothing': none.
@@ -35,11 +35,13 @@ Questions for the author:
 1. Did the agent possibly commit its work? If so, give me a commit range (for example `b7adb15..HEAD`) and I will compare it against 'do nothing'.
 ```
 
-It did not invent findings. But it printed `IN SCOPE` while quoting the rule that forbids it. Someone skimming for the verdict would read that as a pass. It also put text before the Verdict and made up "(vacuous)".
+To its credit, it didn't make anything up. But look at what it did: it printed `IN SCOPE` and, in the very same breath, quoted the rule saying it shouldn't. Anyone skimming for the verdict line would see a pass. On top of that, it stuck a preamble before the Verdict and coined "(vacuous)" out of thin air, which isn't a thing the format allows.
 
 ## Diagnosis
 
-The skill told the agent two things that could not both hold. The Rules said not to report a clean tree as in scope. The Output section required a Verdict and offered only three, and "all files are EXPECTED" is technically true when there are no files. So the agent had to break one instruction, and it kept the required format and hedged in prose. The rule only said what not to do, and nothing in the format gave a clean tree anywhere to go. Rewording the rule would not have helped. The output format needed a case for it.
+Once I sat with it, the problem was obvious — I'd given the agent two instructions that couldn't both be satisfied. The Rules said a clean tree must never be reported as in scope. The Output section demanded a Verdict and offered exactly three options, and "all files are EXPECTED" is, strictly speaking, true when there are zero files. So the agent was forced to break one of the two. It chose to keep the format intact and hedge in the surrounding prose, which is a reasonable choice given an unreasonable spec.
+
+The rule was purely negative — it said what not to do and nothing else — and the format simply had no slot for a clean tree. Tightening the wording of the rule wouldn't have fixed that. The format needed a fourth case.
 
 ## The diff
 
@@ -62,7 +64,7 @@ index 47d64e8..1836eaa 100644
 
 ## Rerun
 
-I gave a new Sonnet subagent the same prompt on a clean tree. This is its whole output:
+Same prompt, same clean tree, another fresh Sonnet subagent. Its entire output was this one line:
 
 ```
 Verdict: NO UNCOMMITTED CHANGES — send a commit range to compare
@@ -70,6 +72,6 @@ Verdict: NO UNCOMMITTED CHANGES — send a commit range to compare
 
 ## Is it fixed?
 
-This failure is fixed for the input I tested. I reran it once, on one model, so I can't say it holds every time.
+For this input, yes. I want to be honest about the limits of that claim, though: I reran it once, on one model. I can't say it holds every time, and I haven't tried it on anything else.
 
-Other problems are still there. The skill still can't review work that was already committed. It only asks for a commit range. Both demo checkers also wrote extra notes around the verdict, and the run 2 checker grouped generated files by folder and gave a muddled count. I left those alone because this step was one targeted change.
+And there are other problems I'm aware of and deliberately didn't touch. The skill still can't review work that's already been committed — all it can do is ask for a commit range. Both demo checkers wrapped extra commentary around the verdict, and the run 2 checker lumped generated files together by folder and produced a count that didn't quite add up. I left all of that alone on purpose. This step was meant to be one targeted change, and I'd rather fix one thing and know it's fixed than fix four and not be sure which one did what.

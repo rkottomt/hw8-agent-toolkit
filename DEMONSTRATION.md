@@ -134,4 +134,4 @@ Questions for the author:
 
 Run 2's OUT OF SCOPE verdict happened because Run 1's `demo/README_TEMPLATE.md` was still uncommitted when the Run 2 checker ran. That is a true finding about the working tree. It is not a doer error. The Run 2 doer did not create or change that file. I had set up the order so the commit came after both runs.
 
-**Did I agree?** Out of Scope was the wrong label because the doer did nothing wrong. Therefore, I disagree. 
+**Did I agree?** Yes. There was an unexpected file in the tree, and the checker was right to flag it rather than assume it was fine. It also asked whether the file predated the task instead of blaming the doer, which is exactly what I want from a report-only checker.
